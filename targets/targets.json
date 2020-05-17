@@ -4056,7 +4056,8 @@
         "overrides": { "lse_available": 0 },
         "device_has_add": ["ANALOGOUT", "TRNG", "FLASH", "MPU"],
         "release_versions": ["2", "5"],
-        "device_name": "STM32F407VG"
+        "device_name": "STM32F407VG",
+        "bootloader_supported": true
     },
     "OLIMEX_STM32E407_F407ZG": {
         "inherits": ["FAMILY_STM32"],
