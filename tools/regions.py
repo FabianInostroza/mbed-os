@@ -33,6 +33,7 @@ from .utils import (
 from intelhex import IntelHex
 
 UPDATE_WHITELIST = (
+    "header",
     "application"
 )
 
