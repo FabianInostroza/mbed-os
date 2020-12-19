@@ -551,16 +551,19 @@ void can_irq_set(can_t *obj, CanIrqType type, uint32_t enable)
 static uint32_t can_irq_ids[CAN_NUM] = {0};
 static can_irq_handler irq_handler;
 
-static void can_registers_init(can_t *obj)
+static int can_registers_init(can_t *obj)
 {
     if (HAL_CAN_Init(&obj->CanHandle) != HAL_OK) {
         error("Cannot initialize CAN");
+        return -1;
     }
 
     // Set initial CAN frequency to specified frequency
     if (can_frequency(obj, obj->hz) != 1) {
         error("Can frequency could not be set\n");
+        return -2;
     }
+    return 0;
 }
 
 #if STATIC_PINMAP_READY
@@ -807,10 +810,10 @@ int can_frequency(can_t *obj, int f)
                 }
             }
             if (status == 0) {
-                error("can ESR  0x%04" PRIx32 ".%04" PRIx32 " + timeout status %d", (can->ESR & 0xFFFF0000) >> 16, (can->ESR & 0xFFFF), status);
+                //error("can ESR  0x%04" PRIx32 ".%04" PRIx32 " + timeout status %d", (can->ESR & 0xFFFF0000) >> 16, (can->ESR & 0xFFFF), status);
             }
         } else {
-            error("can init request timeout\n");
+            //error("can init request timeout\n");
         }
     } else {
         status = 0;
