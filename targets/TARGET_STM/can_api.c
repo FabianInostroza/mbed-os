@@ -554,13 +554,13 @@ static can_irq_handler irq_handler;
 static int can_registers_init(can_t *obj)
 {
     if (HAL_CAN_Init(&obj->CanHandle) != HAL_OK) {
-        error("Cannot initialize CAN");
+        // error("Cannot initialize CAN");
         return -1;
     }
 
     // Set initial CAN frequency to specified frequency
     if (can_frequency(obj, obj->hz) != 1) {
-        error("Can frequency could not be set\n");
+        // error("Can frequency could not be set\n");
         return -2;
     }
     return 0;
