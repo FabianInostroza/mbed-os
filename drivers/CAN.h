@@ -225,7 +225,7 @@ public:
      *
      * To use after error overflow.
      */
-    void reset();
+    int reset();
 
     /** Puts or removes the CAN interface into silent monitoring mode
      *

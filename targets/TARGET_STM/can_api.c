@@ -790,11 +790,11 @@ int can_frequency(can_t *obj, int f)
         tickstart = HAL_GetTick();
         while ((can->MSR & CAN_MSR_INAK) != CAN_MSR_INAK) {
             if ((HAL_GetTick() - tickstart) > 2) {
-                status = 0;
+                status = -2;
                 break;
             }
         }
-        if (status != 0) {
+        if (status > 0) {
             /*  Do not erase all BTR registers (e.g. silent mode), only the
              *  ones calculated in can_speed */
             can->BTR &= ~(CAN_BTR_TS2 | CAN_BTR_TS1 | CAN_BTR_SJW | CAN_BTR_BRP);
@@ -805,7 +805,7 @@ int can_frequency(can_t *obj, int f)
             tickstart = HAL_GetTick();
             while ((can->MSR & CAN_MSR_INAK) == CAN_MSR_INAK) {
                 if ((HAL_GetTick() - tickstart) > 2) {
-                    status = 0;
+                    status = -3;
                     break;
                 }
             }
@@ -816,7 +816,7 @@ int can_frequency(can_t *obj, int f)
             //error("can init request timeout\n");
         }
     } else {
-        status = 0;
+        status = -1;
     }
     return status;
 }
@@ -910,7 +910,7 @@ int can_read(can_t *obj, CAN_Message *msg, int handle)
     return 1;
 }
 
-void can_reset(can_t *obj)
+int can_reset(can_t *obj)
 {
     CAN_TypeDef *can = obj->CanHandle.Instance;
 
@@ -919,7 +919,7 @@ void can_reset(can_t *obj)
     can->ESR = 0x0;
 
     /* restore registers state as saved in obj context */
-    can_registers_init(obj);
+    return can_registers_init(obj);
 }
 
 unsigned char can_rderror(can_t *obj)

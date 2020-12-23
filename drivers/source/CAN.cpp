@@ -86,11 +86,13 @@ int CAN::read(CANMessage &msg, int handle)
     return ret;
 }
 
-void CAN::reset()
+int CAN::reset()
 {
+    int ret;
     lock();
-    can_reset(&_can);
+    ret = can_reset(&_can);
     unlock();
+    return ret;
 }
 
 unsigned char CAN::rderror()

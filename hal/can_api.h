@@ -82,7 +82,7 @@ int           can_write(can_t *obj, CAN_Message, int cc);
 int           can_read(can_t *obj, CAN_Message *msg, int handle);
 int           can_mode(can_t *obj, CanMode mode);
 int           can_filter(can_t *obj, uint32_t id, uint32_t mask, CANFormat format, int32_t handle);
-void          can_reset(can_t *obj);
+int           can_reset(can_t *obj);
 unsigned char can_rderror(can_t *obj);
 unsigned char can_tderror(can_t *obj);
 void          can_monitor(can_t *obj, int silent);
