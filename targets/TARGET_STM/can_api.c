@@ -966,10 +966,16 @@ void can_monitor(can_t *obj, int silent)
 int can_mode(can_t *obj, CanMode mode)
 {
     int success = 0;
+    uint32_t tickstart = 0;
     CAN_TypeDef *can = obj->CanHandle.Instance;
 
+    tickstart = HAL_GetTick();
     can->MCR |= CAN_MCR_INRQ ;
     while ((can->MSR & CAN_MSR_INAK) != CAN_MSR_INAK) {
+        if ((HAL_GetTick() - tickstart) > 2) {
+            success = -2;
+            break;
+        }
     }
 
     switch (mode) {
@@ -1001,8 +1007,13 @@ int can_mode(can_t *obj, CanMode mode)
             break;
     }
 
+    tickstart = HAL_GetTick();
     can->MCR &= ~(uint32_t)CAN_MCR_INRQ;
     while ((can->MSR & CAN_MSR_INAK) == CAN_MSR_INAK) {
+        if ((HAL_GetTick() - tickstart) > 2) {
+            success = -3;
+            break;
+        }
     }
 
     return success;
